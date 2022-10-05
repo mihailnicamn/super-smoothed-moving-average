@@ -1,0 +1,71 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © mn_trade_ac
+
+//@version=5
+indicator("Super Smoothed Moving Average",shorttitle="SSMA", overlay=true)
+
+ma_type = input.string('Simple', title='Choose Moving Average', options=['Simple','Hull','Exponential'])
+ma_period = input(24,title="Initial Period")
+ma_smoothing = input.int(2,step=1,maxval=10,title="How many times to smooth?")
+ma_smoothing_period = input.float(minval=0,step=0.01,defval=1.,title="Smoothing period ratio (use 1 for same period every smoothing)")
+ma_src = input(close,title="Initial Moving Average Source")
+
+ma_ini_plot = input(false,title="Plot initial Moving Average")
+ma_smo_plot = input(false,title="Plot smoothed Moving Average")
+ma_all_plot = input(false,title="Plot All Moving Averages")
+
+multi_ma(src,len, type) =>
+    switch type
+        'Simple' => ta.sma(src,len)
+        'Hull' => ta.hma(src,len)
+        'Exponential' => ta.ema(src,len)
+
+next_period = ma_period
+initial_ma = multi_ma(ma_src,next_period,ma_type)
+next_period := int(next_period * ma_smoothing_period)
+sm_1 = multi_ma(initial_ma,next_period,ma_type)
+next_period := int(next_period * ma_smoothing_period)
+sm_2 = multi_ma(sm_1,next_period,ma_type)
+next_period := int(next_period * ma_smoothing_period)
+sm_3 = multi_ma(sm_2,next_period,ma_type)
+next_period := int(next_period * ma_smoothing_period)
+sm_4 = multi_ma(sm_3,next_period,ma_type)
+next_period := int(next_period * ma_smoothing_period)
+sm_5 = multi_ma(sm_4,next_period,ma_type)
+next_period := int(next_period * ma_smoothing_period)
+sm_6 = multi_ma(sm_5,next_period,ma_type)
+next_period := int(next_period * ma_smoothing_period)
+sm_7 = multi_ma(sm_6,next_period,ma_type)
+next_period := int(next_period * ma_smoothing_period)
+sm_8 = multi_ma(sm_7,next_period,ma_type)
+next_period := int(next_period * ma_smoothing_period)
+sm_9 = multi_ma(sm_8,next_period,ma_type)
+next_period := int(next_period * ma_smoothing_period)
+sm_10 = multi_ma(sm_9,next_period,ma_type)
+
+
+initial_ma := ma_ini_plot ? initial_ma : na
+
+sm_1 := ma_all_plot ? sm_1 : ma_smoothing == 1 ? ma_smo_plot ? sm_1 :na :na 
+sm_2 := ma_all_plot ? sm_2 : ma_smoothing == 2 ? ma_smo_plot ? sm_2 :na :na 
+sm_3 := ma_all_plot ? sm_3 : ma_smoothing == 3 ? ma_smo_plot ? sm_3 :na :na 
+sm_4 := ma_all_plot ? sm_4 : ma_smoothing == 4 ? ma_smo_plot ? sm_4 :na :na 
+sm_5 := ma_all_plot ? sm_5 : ma_smoothing == 5 ? ma_smo_plot ? sm_5 :na :na 
+sm_6 := ma_all_plot ? sm_6 : ma_smoothing == 6 ? ma_smo_plot ? sm_6 :na :na 
+sm_7 := ma_all_plot ? sm_7 : ma_smoothing == 7 ? ma_smo_plot ? sm_7 :na :na 
+sm_8 := ma_all_plot ? sm_8 : ma_smoothing == 8 ? ma_smo_plot ? sm_8 :na :na 
+sm_9 := ma_all_plot ? sm_9 : ma_smoothing == 9 ? ma_smo_plot ? sm_9 :na :na 
+sm_10 := ma_all_plot ? sm_10 : ma_smoothing == 10 ? ma_smo_plot ? sm_10 :na :na 
+
+plot(initial_ma,title="Initial Moving Average",color=color.red)
+plot(sm_1,title="Moving Average Smoothed 1 time")
+plot(sm_2,title="Moving Average Smoothed 2 times")
+plot(sm_3,title="Moving Average Smoothed 3 times")
+plot(sm_4,title="Moving Average Smoothed 4 times")
+plot(sm_5,title="Moving Average Smoothed 5 times")
+plot(sm_6,title="Moving Average Smoothed 6 times")
+plot(sm_7,title="Moving Average Smoothed 7 times")
+plot(sm_8,title="Moving Average Smoothed 8 times")
+plot(sm_9,title="Moving Average Smoothed 9 times")
+plot(sm_10,title="Moving Average Smoothed 10 times")
+
